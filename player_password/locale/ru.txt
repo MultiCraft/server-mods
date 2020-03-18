@@ -1,0 +1,4 @@
+Enter new password:=Введите новый пароль:
+Change Password=Изменить Пароль
+You cannot set an empty password!=Вы не можете установить пустой пароль!
+Password changed! Your new password: @1=Пароль изменён! Ваш новый пароль: @1
