@@ -1,14 +1,11 @@
-if not minetest.settings:get_bool("enable_damage") then
-	return
-end
-
+local enable_damage = minetest.settings:get_bool("enable_damage")
 local vector_distance = vector.distance
 
 local function add_gauge(player)
 	if player and player:is_player() then
 		local entity = minetest.add_entity(player:get_pos(), "gauges:hp_bar")
 
-		entity:set_attach(player, "", {x = 0, y = 9, z = 0}, {x = 0, y = 0, z = 0})
+		entity:set_attach(player, "", {x = 0, y = 19, z = 0}, {x = 0, y = 0, z = 0})
 		entity:get_luaentity().wielder = player
 	end
 end
@@ -24,7 +21,8 @@ minetest.register_entity("gauges:hp_bar", {
 		local player = self.wielder
 		local gauge  = self.object
 
-		if not player or not player:is_player() then
+		if not enable_damage or
+				not player or not player:is_player() then
 			gauge:remove()
 			return
 		elseif vector_distance(player:get_pos(), gauge:get_pos()) > 3 then
@@ -34,7 +32,7 @@ minetest.register_entity("gauges:hp_bar", {
 		end
 
 		local hp     = player:get_hp()     <= 20 and player:get_hp()     or 20
-		local breath = player:get_breath() <= 10 and player:get_breath() or 11
+		local breath = player:get_breath() <  10 and player:get_breath() or 11
 
 		if self.hp ~= hp or self.breath ~= breath then
 			gauge:set_properties({
@@ -49,6 +47,8 @@ minetest.register_entity("gauges:hp_bar", {
 	end
 })
 
-minetest.register_on_joinplayer(function(player)
-	minetest.after(1, add_gauge, player)
-end)
+if enable_damage then
+	minetest.register_on_joinplayer(function(player)
+		minetest.after(1, add_gauge, player)
+	end)
+end
