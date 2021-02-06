@@ -14,12 +14,12 @@ local function my_serialize_2(t, level)
 		local typ = type(v)
 		if typ == "table" then
 			table.insert(lines,
-			  indent..("[%s] = {\n"):format(repr(k))
-			  ..my_serialize_2(v, level + 1).."\n"
-			  ..indent.."},")
+				indent..("[%s] = {\n"):format(repr(k))
+				..my_serialize_2(v, level + 1).."\n"
+				..indent.."},")
 		else
 			table.insert(lines,
-			  indent..("[%s] = %s,"):format(repr(k), repr(v)))
+				indent..("[%s] = %s,"):format(repr(k), repr(v)))
 		end
 	end
 	return table.concat(lines, "\n")

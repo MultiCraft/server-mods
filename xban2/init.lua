@@ -2,17 +2,17 @@ xban = {
 	MP = minetest.get_modpath(minetest.get_current_modname())
 }
 
-dofile(xban.MP.."/serialize.lua")
+dofile(xban.MP .. "/serialize.lua")
 
-local db = { }
-local tempbans = { }
+local db = {}
+local tempbans = {}
 
 local DEF_SAVE_INTERVAL = 300 -- 5 minutes
-local DEF_DB_FILENAME = minetest.get_worldpath().."/xban.db"
+local DEF_DB_FILENAME = minetest.get_worldpath() .. "/xban.db"
 
 local DB_FILENAME = minetest.settings:get("xban.db_filename")
 local SAVE_INTERVAL = tonumber(
-  minetest.settings:get("xban.db_save_interval")) or DEF_SAVE_INTERVAL
+	minetest.settings:get("xban.db_save_interval")) or DEF_SAVE_INTERVAL
 
 if (not DB_FILENAME) or (DB_FILENAME == "") then
 	DB_FILENAME = DEF_DB_FILENAME
@@ -107,8 +107,7 @@ function xban.ban_player(player, source, expires, reason) --> bool, err
 	e.expires = expires
 	e.banned = true
 	local msg
-	local date = (expires and os.date("%c", expires)
-	  or "the end of time")
+	local date = (expires and os.date("%c", expires) or "the end of time")
 	if expires then
 		table.insert(tempbans, e)
 		msg = ("Banned: Expires: %s, Reason: %s"):format(date, reason)
@@ -118,8 +117,7 @@ function xban.ban_player(player, source, expires, reason) --> bool, err
 	for nm in pairs(e.names) do
 		minetest.kick_player(nm, msg)
 	end
-	ACTION("%s bans %s until %s for reason: %s", source, player,
-	  date, reason)
+	ACTION("%s bans %s until %s for reason: %s", source, player, date, reason)
 	ACTION("Banned Names/IPs: %s", concat_keys(e.names, ", "))
 	return true
 end
@@ -187,7 +185,7 @@ function xban.get_record(player)
 	local last_pos
 	if e.last_pos then
 		last_pos = ("User was last seen at %s"):format(
-		  minetest.pos_to_string(e.last_pos))
+			minetest.pos_to_string(e.last_pos))
 	end
 	return record, last_pos
 end
@@ -199,9 +197,9 @@ minetest.register_on_prejoinplayer(function(name, ip)
 	if not e then return end
 	if e.banned then
 		local date = (e.expires and os.date("%c", e.expires)
-		  or "the end of time")
+			or "the end of time")
 		return ("Banned: Expires: %s, Reason: %s"):format(
-		  date, e.reason)
+			date, e.reason)
 	end
 end)
 
@@ -240,7 +238,7 @@ minetest.register_chatcommand("xban", {
 minetest.register_chatcommand("xtempban", {
 	description = "XBan a player temporarily",
 	params = "<player> <time> <reason>",
-	privs = { ban=true },
+	privs = { ban=true, moderator=true },
 	func = function(name, params)
 		local plname, time, reason = params:match("(%S+)%s+(%S+)%s+(.+)")
 		if not (plname and time and reason) then
@@ -264,8 +262,7 @@ minetest.register_chatcommand("xunban", {
 	func = function(name, params)
 		local plname = params:match("%S+")
 		if not plname then
-			minetest.chat_send_player(name,
-			  "Usage: /xunban <player_or_ip>")
+			minetest.chat_send_player(name, "Usage: /xunban <player_or_ip>")
 			return
 		end
 		local ok, e = xban.unban_player(plname, name)
@@ -276,7 +273,7 @@ minetest.register_chatcommand("xunban", {
 minetest.register_chatcommand("xban_record", {
 	description = "Show the ban records of a player",
 	params = "<player_or_ip>",
-	privs = { ban=true },
+	privs = { ban=true, moderator=true },
 	func = function(name, params)
 		local plname = params:match("%S+")
 		if not plname then
@@ -372,7 +369,7 @@ local function load_db()
 	local t, e2 = xban.deserialize_db(cont)
 	if not t then
 		WARNING("Unable to load database: %s",
-		  "Deserialization failed: "..(e2 or "unknown error"))
+			"Deserialization failed: "..(e2 or "unknown error"))
 		return
 	end
 	db = t
