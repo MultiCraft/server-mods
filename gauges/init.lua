@@ -1,5 +1,4 @@
 local enable_damage = minetest.settings:get_bool("enable_damage")
-local vector_distance = vector.distance
 
 local function add_gauge(player)
 	if player and player:is_player() then
@@ -34,12 +33,6 @@ minetest.register_entity("gauges:hp_bar", {
 		if not enable_damage or
 				not player or not player:is_player() then
 			gauge:remove()
-			return
-		elseif vector_distance(player:get_pos(), gauge:get_pos()) > 3 then
-			gauge:remove()
-			add_gauge(player)
-
-			minetest.log("warning", "[GAUGES] Distance between player detected!")
 			return
 		end
 
@@ -78,6 +71,9 @@ if enable_damage then
 		minetest.after(1, function()
 			local name = player:get_player_name()
 			local pos = player:get_pos()
+			if not pos then
+				return
+			end
 
 			for _, obj in pairs(minetest.get_objects_inside_radius(pos, 1)) do
 				local ent = obj:get_luaentity()
