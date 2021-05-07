@@ -213,16 +213,20 @@ function inv_access.show_inventory(player_name, victim_name)
 	return true
 end
 
-inv_access.register_allow_access(function(player, _)
-	return minetest.check_player_privs(player, "moderator")
-end)
+local function check_privs(player)
+	return minetest.check_player_privs(player, "moderator") or
+		minetest.check_player_privs(player, "server")
+end
+
+inv_access.register_allow_access(check_privs)
 
 minetest.register_chatcommand("inventory", {
 	description = "Opens the inventory of a player.",
-	privs = {moderator = true}, -- there must be a "server" privilege to
 	params = "<player>",
 	func = function(name, param)
-		if inv_access.show_inventory(name, param) then
+		if not check_privs(name) then
+			return false, "Insufficient privileges"
+		elseif inv_access.show_inventory(name, param) then
 			return true
 		else
 			return false, "The specified player is not online."
