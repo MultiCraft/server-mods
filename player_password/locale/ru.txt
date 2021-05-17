@@ -1,4 +1,7 @@
 Enter new password:=Введите новый пароль:
 Change Password=Изменить Пароль
 You cannot set an empty password!=Вы не можете установить пустой пароль!
+The password is too short! Minimum length - 3 characters.=Пароль слишком короткий! Минимальная длина - 24 символа.
+The password is too long! Maximum length - 24 characters.=Пароль слишком длинный! Максимальная длина - 24 символа.
+The password contains prohibited characters! Use only Latin letters or numbers.=Пароль содержит запрещённые символы! Используйте только латинские буквы или цифры.
 Password changed! Your new password: @1=Пароль изменён! Ваш новый пароль: @1
