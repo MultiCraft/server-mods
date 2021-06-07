@@ -198,16 +198,16 @@ function inv_access.show_inventory(player_name, victim_name)
 	local invname = inv_access.get_detached_inventory(victim)
 	minetest.after(0, minetest.show_formspec, player_name, "inv_access",
 		fs ..
-		"image[0,-0.1;1,1;" .. player_api.preview(player, nil, true) .. "]" ..
+		"image[0,-0.1;1,1;" .. player_api.preview(victim, nil, true) .. "]" ..
 		"label[1,0.1;" .. minetest.formspec_escape("Inventory of " ..
-			player_name) .. "]" ..
+			victim_name) .. "]" ..
 		"list[detached:" .. invname .. ";main;0,1;9,3;9]" ..
 		"list[detached:" .. invname .. ";main;0,4.22;9,1;]" ..
 		"label[5,5.5;Player's armor]" ..
-		"image[5,6.05;1,1;formspec_cell.png^3d_armor_inv_helmet.png]" ..
-		"image[6,6.05;1,1;formspec_cell.png^3d_armor_inv_chestplate.png]" ..
-		"image[7,6.05;1,1;formspec_cell.png^3d_armor_inv_leggings.png]" ..
-		"image[8,6.05;1,1;formspec_cell.png^3d_armor_inv_boots.png]" ..
+		"image[5,6.04;1,1;formspec_cell.png^3d_armor_inv_helmet.png]" ..
+		"image[6,6.04;1,1;formspec_cell.png^3d_armor_inv_chestplate.png]" ..
+		"image[7,6.04;1,1;formspec_cell.png^3d_armor_inv_leggings.png]" ..
+		"image[8,6.04;1,1;formspec_cell.png^3d_armor_inv_boots.png]" ..
 		"list[detached:" .. invname .. ";armor;5,6.04;4,1;]"
 	)
 	return true
@@ -231,5 +231,6 @@ minetest.register_chatcommand("inventory", {
 		else
 			return false, "The specified player is not online."
 		end
-	end,
+	end
 })
+minetest.register_chatcommand_alias("inv", "inventory")
