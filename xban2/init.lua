@@ -238,7 +238,7 @@ minetest.register_chatcommand("xban", {
 minetest.register_chatcommand("xtempban", {
 	description = "XBan a player temporarily",
 	params = "<player> <time> <reason>",
-	privs = { ban=true, moderator=true },
+	privs = { ban=true },
 	func = function(name, params)
 		local plname, time, reason = params:match("(%S+)%s+(%S+)%s+(.+)")
 		if not (plname and time and reason) then
@@ -273,7 +273,7 @@ minetest.register_chatcommand("xunban", {
 minetest.register_chatcommand("xban_record", {
 	description = "Show the ban records of a player",
 	params = "<player_or_ip>",
-	privs = { ban=true, moderator=true },
+	privs = { ban=true },
 	func = function(name, params)
 		local plname = params:match("%S+")
 		if not plname then
